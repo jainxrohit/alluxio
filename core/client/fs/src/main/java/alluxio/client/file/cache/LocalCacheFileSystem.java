@@ -23,6 +23,7 @@ import alluxio.grpc.OpenFilePOptions;
  * A FileSystem implementation with a local cache.
  */
 public class LocalCacheFileSystem extends DelegatingFileSystem {
+
   private static CacheManager sCacheManager;
 
   private final AlluxioConfiguration mConf;

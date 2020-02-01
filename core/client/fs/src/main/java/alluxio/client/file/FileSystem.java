@@ -14,7 +14,6 @@ package alluxio.client.file;
 import alluxio.AlluxioURI;
 import alluxio.ClientContext;
 import alluxio.annotation.PublicApi;
-import alluxio.client.file.cache.LocalCacheFileSystem;
 import alluxio.conf.AlluxioConfiguration;
 import alluxio.conf.InstancedConfiguration;
 import alluxio.conf.PropertyKey;
@@ -50,10 +49,11 @@ import alluxio.wire.BlockLocationInfo;
 import alluxio.wire.MountPointInfo;
 import alluxio.wire.SyncPointInfo;
 import alluxio.wire.WorkerNetAddress;
-
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.security.auth.Subject;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -62,8 +62,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.security.auth.Subject;
 
 /**
  * Basic file system interface supporting metadata operations and data operations. Developers
@@ -154,8 +152,12 @@ public interface FileSystem extends Closeable {
       Object[] ctorArgs = new Object[] {context};
       FileSystem fs =
           (FileSystem) CommonUtils.createNewClassInstance(fsClass, ctorArgClasses, ctorArgs);
-      if (conf.getBoolean(PropertyKey.USER_LOCAL_CACHE_ENABLED)) {
-        return new LocalCacheFileSystem(fs, conf);
+
+      if (context.getClusterConf().getBoolean(PropertyKey.USER_LOCAL_CACHE_ENABLED)) {
+        Class localCacheFSClass = context.getClusterConf().getClass(PropertyKey.USER_LOCAL_CACHE_FILESYSTEM_CLASS);
+        Class[] ctorArgLocalCacheClasses = new Class[] {FileSystem.class, FileSystemContext.class};
+        Object[] ctorLocalCacheArgs = new Object[] {fs, context};
+        return (FileSystem) CommonUtils.createNewClassInstance(localCacheFSClass, ctorArgLocalCacheClasses, ctorLocalCacheArgs);
       } else {
         return fs;
       }
@@ -170,6 +172,7 @@ public interface FileSystem extends Closeable {
    * @return whether or not this FileSystem has been closed
    */
   boolean isClosed();
+
 
   /**
    * Convenience method for {@link #createDirectory(AlluxioURI, CreateDirectoryPOptions)} with
@@ -426,6 +429,12 @@ public interface FileSystem extends Closeable {
       throws FileDoesNotExistException, OpenDirectoryException, FileIncompleteException,
       IOException, AlluxioException {
     return openFile(path, OpenFilePOptions.getDefaultInstance());
+  }
+
+  default FileInStream openFileByDescriptor(AlluxioURI path, OpenFilePOptions options, Object fileInfo)
+          throws FileDoesNotExistException, OpenDirectoryException, FileIncompleteException,
+          IOException, AlluxioException {
+    return openFile(path, options);
   }
 
   /**
