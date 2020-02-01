@@ -147,7 +147,10 @@ public interface FileSystem extends Closeable {
       FileSystem fs =
           (FileSystem) CommonUtils.createNewClassInstance(fsClass, ctorArgClasses, ctorArgs);
       if (context.getClusterConf().getBoolean(PropertyKey.USER_LOCAL_CACHE_ENABLED)) {
-        return new LocalCacheFileSystem(fs, context);
+        Class localCacheFSClass = context.getClusterConf().getClass(PropertyKey.USER_LOCAL_CACHE_FILESYSTEM_CLASS);
+        Class[] ctorArgLocalCacheClasses = new Class[] {FileSystem.class, FileSystemContext.class};
+        Object[] ctorLocalCacheArgs = new Object[] {fs, context};
+        return (FileSystem) CommonUtils.createNewClassInstance(localCacheFSClass, ctorArgLocalCacheClasses, ctorLocalCacheArgs);
       } else {
         return fs;
       }
@@ -162,6 +165,10 @@ public interface FileSystem extends Closeable {
    * @return whether or not this FileSystem has been closed
    */
   boolean isClosed();
+
+  default void setDelegatedFileSystem(Object fileSystem) {
+  }
+
 
   /**
    * Convenience method for {@link #createDirectory(AlluxioURI, CreateDirectoryPOptions)} with
@@ -418,6 +425,12 @@ public interface FileSystem extends Closeable {
       throws FileDoesNotExistException, OpenDirectoryException, FileIncompleteException,
       IOException, AlluxioException {
     return openFile(path, OpenFilePOptions.getDefaultInstance());
+  }
+
+  default FileInStream openFileByDescriptor(AlluxioURI path, OpenFilePOptions options, Object fileInfo)
+          throws FileDoesNotExistException, OpenDirectoryException, FileIncompleteException,
+          IOException, AlluxioException {
+    return openFile(path, options);
   }
 
   /**

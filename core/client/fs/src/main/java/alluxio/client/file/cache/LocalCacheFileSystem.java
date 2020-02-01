@@ -22,7 +22,7 @@ import alluxio.grpc.OpenFilePOptions;
  * A FileSystem implementation with a local cache.
  */
 public class LocalCacheFileSystem extends DelegatingFileSystem {
-  private final FileSystemContext mFsContext;
+  protected final FileSystemContext mFsContext;
 
   /**
    * @param fs a FileSystem instance to query on local cache miss

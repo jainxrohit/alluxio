@@ -126,7 +126,7 @@ public class ClientContext {
    */
   public synchronized void loadConf(InetSocketAddress address, boolean loadClusterConf,
       boolean loadPathConf) throws AlluxioStatusException {
-    AlluxioConfiguration conf = mClusterConf;
+/*    AlluxioConfiguration conf = mClusterConf;
     if (!loadClusterConf && !loadPathConf) {
       return;
     }
@@ -140,7 +140,7 @@ public class ClientContext {
       mPathConf = ConfigurationUtils.getPathConf(response, conf);
       mPathConfHash = response.getPathConfigHash();
       mIsPathConfLoaded = true;
-    }
+    }*/
   }
 
   /**

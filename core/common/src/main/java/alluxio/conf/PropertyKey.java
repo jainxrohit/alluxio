@@ -3169,6 +3169,13 @@ public final class PropertyKey implements Comparable<PropertyKey> {
           .setConsistencyCheckLevel(ConsistencyCheckLevel.WARN)
           .setScope(Scope.CLIENT)
           .build();
+  public static final PropertyKey USER_LOCAL_CACHE_FILESYSTEM_CLASS =
+          new Builder(Name.USER_LOCAL_CACHE_FILESYSTEM_CLASS)
+                  .setDefaultValue("alluxio.client.file.cache.LocalCacheFileSystem")
+                  .setDescription("Name of the localcache file system.")
+                  .setConsistencyCheckLevel(ConsistencyCheckLevel.WARN)
+                  .setScope(Scope.CLIENT)
+                  .build();
   public static final PropertyKey USER_HOSTNAME = new Builder(Name.USER_HOSTNAME)
       .setDescription("The hostname to use for an Alluxio client.")
       .setConsistencyCheckLevel(ConsistencyCheckLevel.WARN)
@@ -4556,6 +4563,7 @@ public final class PropertyKey implements Comparable<PropertyKey> {
     public static final String USER_FILE_WRITE_TIER_DEFAULT =
         "alluxio.user.file.write.tier.default";
     public static final String USER_FILESYSTEM_CLASS = "alluxio.user.filesystem.class";
+    public static final String USER_LOCAL_CACHE_FILESYSTEM_CLASS = "alluxio.user.local.cache.filesystem.class";
     public static final String USER_HOSTNAME = "alluxio.user.hostname";
     public static final String USER_LOCAL_CACHE_ENABLED = "alluxio.user.local.cache.enabled";
     public static final String USER_LOCAL_READER_CHUNK_SIZE_BYTES =

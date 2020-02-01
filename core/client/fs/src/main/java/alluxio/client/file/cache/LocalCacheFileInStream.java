@@ -41,25 +41,25 @@ public class LocalCacheFileInStream extends FileInStream {
   /** Page size in bytes. */
   protected final long mPageSize;
 
-  private final byte[] mSingleByte = new byte[1];
-  private final Closer mCloser = Closer.create();
+  protected final byte[] mSingleByte = new byte[1];
+  protected final Closer mCloser = Closer.create();
 
   /** Local store to store pages. */
-  private final CacheManager mCacheManager;
+  protected final CacheManager mCacheManager;
   /** External storage system. */
-  private final FileSystem mExternalFs;
+  protected final FileSystem mExternalFs;
   /** Path of the file. */
-  private final AlluxioURI mPath;
+  protected final AlluxioURI mPath;
   /** File info, fetched from external FS. */
-  private final URIStatus mStatus;
-  private final OpenFilePOptions mOpenOptions;
+  protected final URIStatus mStatus;
+  protected final OpenFilePOptions mOpenOptions;
 
   /** Stream reading from the external file system, opened once. */
-  private FileInStream mExternalFileInStream;
+  protected FileInStream mExternalFileInStream;
   /** Current position of the stream, relative to the start of the file. */
-  private long mPosition = 0;
-  private boolean mClosed = false;
-  private boolean mEOF = false;
+  protected long mPosition = 0;
+  protected boolean mClosed = false;
+  protected boolean mEOF = false;
 
   /**
    * Constructor.
@@ -263,7 +263,7 @@ public class LocalCacheFileInStream extends FileInStream {
    *
    * @param pos position to set the external stream to
    */
-  private FileInStream getExternalFileInStream(long pos) throws IOException {
+  protected FileInStream getExternalFileInStream(long pos) throws IOException {
     try {
       if (mExternalFileInStream == null) {
         mExternalFileInStream = mExternalFs.openFile(mPath, mOpenOptions);

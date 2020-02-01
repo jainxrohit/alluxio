@@ -494,6 +494,11 @@ public abstract class AbstractFileSystem extends org.apache.hadoop.fs.FileSystem
         (uri.getScheme() != null) ? uri.getScheme().equals(Constants.SCHEME) : true;
     mFileSystem = FileSystem.Factory.create(
         ClientContext.create(subject, alluxioConf).setUriValidationEnabled(disableUriValidation));
+    mFileSystem.setDelegatedFileSystem(getDelegatedFileSystem());
+  }
+
+  protected org.apache.hadoop.fs.FileSystem getDelegatedFileSystem() {
+    return null;
   }
 
   /**

@@ -65,6 +65,11 @@ public class DelegatingFileSystem implements FileSystem {
   }
 
   @Override
+  public void setDelegatedFileSystem(Object fileSystem) {
+    mDelegatedFileSystem.setDelegatedFileSystem(fileSystem);
+  }
+
+  @Override
   public void createDirectory(AlluxioURI path, CreateDirectoryPOptions options)
       throws FileAlreadyExistsException, InvalidPathException, IOException, AlluxioException {
     mDelegatedFileSystem.createDirectory(path, options);

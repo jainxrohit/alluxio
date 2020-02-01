@@ -51,6 +51,11 @@ public class LocalPageStore implements PageStore {
    */
   public LocalPageStore(LocalPageStoreOptions options) {
     mRoot = options.getRootDir();
+    try {
+      FileUtils.deleteDirectory(new File(mRoot));
+    } catch (IOException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   @Override
