@@ -308,7 +308,7 @@ public class LocalCacheFileInStreamTest {
       }
     }
   }
-
+  
   private LocalCacheFileInStream setupWithSingleFile(byte[] data, CacheManager manager) {
     Map<AlluxioURI, byte[]> files = new HashMap<>();
     AlluxioURI testFilename = new AlluxioURI("/test");
